@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 
 public class Main{
     public static void main(String[] args) {
@@ -18,21 +19,20 @@ public class Main{
             System.out.println("Hey this is elang only .el files allowed");
             return ;
         }
-    try(BufferedReader reader=new BufferedReader(new FileReader((args[0])))){
-    String line;
-    while((line= reader.readLine())!=null){
-        line =line.trim();
-        //if no code in file
-        if(line.isEmpty()){
-                continue;
-            }
-        // tokenizing
-        String [] tokens=line.split(" ");
-        for(String code:tokens){
-            System.out.println("Tokens: "+code);
+
+        try(BufferedReader reader=new BufferedReader(new FileReader((args[0])))){
+                String line;
+            while((line= reader.readLine())!=null){
+                line =line.trim();
+                //if no code in file
+                    if(line.isEmpty()){ continue; }
+
+         // tokenizing
+                List<Token> tokens=Lexer.tokenize(line);
+        for(Token token:tokens){
+            System.out.println("Tokens: "+token);
         }
 
-        System.out.println(line);
     }
 }
     catch(IOException e){

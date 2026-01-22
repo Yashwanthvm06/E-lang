@@ -58,3 +58,29 @@ In E-lang:
 
 Result:
 E-lang can now break source code into tokens, which is the foundation for execution logic.
+
+# Day 4 - Lexer + File Handling
+
+## What I learned
+- How Java reads files using BufferedReader
+- Difference between FileReader and BufferedReader
+- What a Lexer is in compiler design
+- Why split() is not used in real languages
+- How to tokenize input character by character
+
+## Key Concepts
+- Token
+- TokenType
+- Lexer
+- Character scanning
+- Enum usage
+
+## Current Features
+- Keywords (print)
+- Numbers
+- Operators (+ - * /)
+
+## Next
+- Strings
+- Parentheses
+- Parser
