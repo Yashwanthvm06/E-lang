@@ -18,17 +18,24 @@ public class Main{
             System.out.println("Hey this is elang only .el files allowed");
             return ;
         }
-try(BufferedReader reader=new BufferedReader(new FileReader((args[0])))){
+    try(BufferedReader reader=new BufferedReader(new FileReader((args[0])))){
     String line;
     while((line= reader.readLine())!=null){
         line =line.trim();
+        //if no code in file
         if(line.isEmpty()){
-            continue;
+                continue;
+            }
+        // tokenizing
+        String [] tokens=line.split(" ");
+        for(String code:tokens){
+            System.out.println("Tokens: "+code);
         }
+
         System.out.println(line);
     }
 }
-catch(IOException e){
+    catch(IOException e){
     System.out.println("Error reading the provided file: " + e.getMessage());
 }
     }
