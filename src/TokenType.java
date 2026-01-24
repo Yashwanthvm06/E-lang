@@ -2,5 +2,8 @@ public enum TokenType {
     KEYWORD,
     NUMBER,
     OPERATOR,
-    IDENTIFIER
+    IDENTIFIER,
+    STRING,
+    LPAREN,
+    RPAREN
 }

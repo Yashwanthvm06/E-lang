@@ -84,3 +84,24 @@ E-lang can now break source code into tokens, which is the foundation for execut
 - Strings
 - Parentheses
 - Parser
+
+# Day 5 - Strings & Parentheses
+
+## What I learned
+- How strings are tokenized
+- Why strings ignore spaces
+- How parentheses are handled
+- How token position (line, column) works
+
+## New Tokens
+- STRING
+- LPAREN
+- RPAREN
+
+## Improvements
+- Error reporting with line and column
+- Real compiler-style lexer
+
+## Next
+- Expression parsing
+- AST (Abstract Syntax Tree)

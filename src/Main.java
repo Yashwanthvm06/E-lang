@@ -22,17 +22,20 @@ public class Main{
 
         try(BufferedReader reader=new BufferedReader(new FileReader((args[0])))){
                 String line;
+                int lineNumber=1;
             while((line= reader.readLine())!=null){
                 line =line.trim();
                 //if no code in file
-                    if(line.isEmpty()){ continue; }
-
+                    if(line.isEmpty()){
+                        lineNumber++;
+                        continue;
+                    }
          // tokenizing
-                List<Token> tokens=Lexer.tokenize(line);
+                List<Token> tokens=Lexer.tokenize(line,lineNumber);
         for(Token token:tokens){
             System.out.println("Tokens: "+token);
         }
-
+lineNumber++;
     }
 }
     catch(IOException e){
