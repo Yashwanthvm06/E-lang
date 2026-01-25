@@ -105,3 +105,113 @@ E-lang can now break source code into tokens, which is the foundation for execut
 ## Next
 - Expression parsing
 - AST (Abstract Syntax Tree)
+
+# Day 6 - Expressions, Terms, Factors & AST Basics
+
+## 1. Operator Precedence
+Operators do not execute in reading order.
+
+Priority:
+1. Parentheses ()
+2. * and /
+3. + and -
+
+Example:
+10 - 2 * 3 + 4 / 2
+Result = 6
+
+---
+
+## 2. Grammar Structure
+
+Expression → Term ((+ | -) Term)*
+Term → Factor ((* | /) Factor)*
+Factor → Number | ( Expression )
+
+Meaning:
+- Expression handles + -
+- Term handles * /
+- Factor handles numbers and parenthesis groups
+
+---
+
+## 3. What Parentheses Do
+
+Parentheses override precedence.
+
+5 + 2 * 3 = 11  
+(5 + 2) * 3 = 21  
+
+Parentheses wrap an entire Expression.
+
+---
+
+## 4. What is AST (Abstract Syntax Tree)
+
+AST is a tree representation of code meaning.
+
+It does NOT store characters.
+It stores structure.
+
+Nodes represent:
+- Number
+- Binary Operation
+- Print Statement
+
+---
+
+## 5. AST is Built Using Precedence
+
+AST is NOT built left-to-right.
+AST uses grammar rules.
+
+Example:
+print 2 + 3 * 4
+
+Root: +
+Left: 2
+Right: *
+    Left: 3
+    Right: 4
+
+---
+
+## 6. Traversal vs Structure
+
+AST has no fixed reading order.
+
+Traversal types:
+- Inorder (Left Root Right)
+- Preorder (Root Left Right)
+- Postorder (Left Right Root)
+
+Interpreters usually use Postorder.
+
+---
+
+## 7. Why AST is Needed
+
+- Separates meaning from text
+- Handles precedence
+- Enables evaluation
+- Enables future features (variables, if, loops)
+
+---
+
+## 8. Big Picture Pipeline
+
+Source Code
+→ Tokenizer
+→ Parser
+→ AST
+→ Evaluator
+→ Output
+
+---
+
+## 9. Key Takeaways
+
+- Tokens are not execution
+- Grammar defines shape
+- AST stores meaning
+- Traversal evaluates meaning
