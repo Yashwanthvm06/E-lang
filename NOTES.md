@@ -215,3 +215,137 @@ Source Code
 - Grammar defines shape
 - AST stores meaning
 - Traversal evaluates meaning
+
+
+# Day 7 — Abstract Syntax Tree (AST) & Node System
+
+## Goal
+Understand how a programming language represents code using tree structures and how expressions are evaluated using nodes.
+
+---
+
+## What is AST (Abstract Syntax Tree)
+
+AST is a tree representation of source code.
+
+Example:
+2 + 3 * 4
+
+Tree:
+    +
+   / \
+  2   *
+     / \
+    3   4
+
+Tree structure represents operator precedence.
+
+---
+
+## Node (Base Class)
+
+All language components extend a common parent called Node.
+
+Node defines:
+- evaluate() method
+
+Node is abstract and cannot be instantiated.
+
+---
+
+## NumberNode
+
+Represents a numeric value.
+
+Stores:
+- int value
+
+Behavior:
+- evaluate() returns the stored value.
+
+---
+
+## BinaryNode
+
+Represents binary operations.
+
+Examples:
+2 + 3  
+4 * 5  
+
+Stores:
+- Node left
+- Node right
+- char operator
+
+Behavior:
+1. Call left.evaluate()
+2. Call right.evaluate()
+3. Apply operator
+4. Return result
+
+BinaryNode does NOT handle precedence.
+
+---
+
+## PrintNode
+
+Represents print statements.
+
+Example:
+print 5 + 2
+
+Stores:
+- Node expression
+
+Behavior:
+1. Evaluate expression
+2. Print value
+3. Return value
+
+---
+
+## Recursive Evaluation
+
+Nodes call evaluate() on their children.
+Children may call evaluate() on their children.
+Process continues until NumberNode is reached.
+
+Values move upward through the tree.
+
+---
+
+## Polymorphism
+
+All nodes are stored as type Node.
+
+Java decides at runtime which evaluate() method to call based on actual object type.
+
+---
+
+## Responsibilities
+
+Tokenizer → Converts text to tokens  
+Parser → Builds AST  
+Nodes → Evaluate AST  
+
+---
+
+## Key Rules
+
+- Operators exist only in BinaryNode  
+- Numbers exist only in NumberNode  
+- Precedence handled by Parser  
+- Nodes never read files  
+- Nodes never tokenize  
+
+---
+
+## Result
+
+After Day 7 you understand:
+- AST structure
+- Node hierarchy
+- Recursive evaluation
+- Operator as root of BinaryNode
+- Separation of tokenizer, parser, and evaluator
