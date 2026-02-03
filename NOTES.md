@@ -1,4 +1,5 @@
 # ELang – Learning Notes
+
 ## Day 1 – Project Setup
 - Created Java project
 - Created GitHub repository
