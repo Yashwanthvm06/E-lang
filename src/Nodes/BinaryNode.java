@@ -4,7 +4,7 @@ public class BinaryNode extends Node{
     private char operator;
     private Node left;
     private Node right;
-    BinaryNode(Node left,char operator,Node right){
+    public BinaryNode(Node left, char operator, Node right){
         this.left=left;
         this.operator=operator;
         this.right=right;
