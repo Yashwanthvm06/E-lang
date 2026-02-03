@@ -1,351 +1,87 @@
 # ELang – Learning Notes
-
-## Day 1
+## Day 1 – Project Setup
+- Created Java project
 - Created GitHub repository
-- Defined project goal
-- Decided to build an interpreted language in Java
-- Learned basic Git workflow (clone, commit, push)
-
-This file will track my understanding and progress while building ELang.
-
-## Day 2 – Reading Source Files
-
-- A programming language starts by reading source code as plain text
-- .el is just a text file and not a real language yet
-- Used Java BufferedReader and FileReader to read files line by line
-- Learned how args[] works to accept file names from the command line
-
-Added validation:
-
-- A file must be provided
-- Only one file is allowed
-- Only .el extension is accepted
-- Used trim() to remove extra spaces
-- Skipped empty lines
-- Understood that reading code does not mean executing it
-- Main.java is acting as a temporary interpreter runner
-
-Learned basic project structure:
-
-- src/ → Java source files
-- Programs/ → E-lang programs
-
-Learned Git workflow:
-
--  Create a branch for each day
--  Commit changes
-- Push branch to GitHub
-- Merge using Pull Request
-
-Result:
-E-lang can now safely read .el files and prepare input for further processing.
-
-## Day 3 – Tokenization (Understanding Code)
-
-- Learned that programming languages do not understand full lines directly
-- Code is broken into small parts called tokens
-- Tokens represent meaningful pieces like keywords, values, and symbols
-
-In E-lang:
-
-- print is treated as a keyword
-- Words and symbols after print are values
-- One instruction is written per line
-- Implemented basic tokenization by splitting lines using spaces
-- Each line is processed independently
-- No execution logic is added yet
-- Focused only on identifying structure, not running commands
-
-Result:
-E-lang can now break source code into tokens, which is the foundation for execution logic.
-
-# Day 4 - Lexer + File Handling
-
-## What I learned
-- How Java reads files using BufferedReader
-- Difference between FileReader and BufferedReader
-- What a Lexer is in compiler design
-- Why split() is not used in real languages
-- How to tokenize input character by character
-
-## Key Concepts
-- Token
-- TokenType
-- Lexer
-- Character scanning
-- Enum usage
-
-## Current Features
-- Keywords (print)
-- Numbers
-- Operators (+ - * /)
-
-## Next
-- Strings
-- Parentheses
-- Parser
-
-# Day 5 - Strings & Parentheses
-
-## What I learned
-- How strings are tokenized
-- Why strings ignore spaces
-- How parentheses are handled
-- How token position (line, column) works
-
-## New Tokens
-- STRING
-- LPAREN
-- RPAREN
-
-## Improvements
-- Error reporting with line and column
-- Real compiler-style lexer
-
-## Next
-- Expression parsing
-- AST (Abstract Syntax Tree)
-
-# Day 6 - Expressions, Terms, Factors & AST Basics
-
-## 1. Operator Precedence
-Operators do not execute in reading order.
-
-Priority:
-1. Parentheses ()
-2. * and /
-3. + and -
-
-Example:
-10 - 2 * 3 + 4 / 2
-Result = 6
-
----
-
-## 2. Grammar Structure
-
-Expression → Term ((+ | -) Term)*
-Term → Factor ((* | /) Factor)*
-Factor → Number | ( Expression )
-
-Meaning:
-- Expression handles + -
-- Term handles * /
-- Factor handles numbers and parenthesis groups
-
----
-
-## 3. What Parentheses Do
-
-Parentheses override precedence.
-
-5 + 2 * 3 = 11  
-(5 + 2) * 3 = 21  
-
-Parentheses wrap an entire Expression.
-
----
-
-## 4. What is AST (Abstract Syntax Tree)
-
-AST is a tree representation of code meaning.
-
-It does NOT store characters.
-It stores structure.
-
-Nodes represent:
-- Number
-- Binary Operation
-- Print Statement
-
----
-
-## 5. AST is Built Using Precedence
-
-AST is NOT built left-to-right.
-AST uses grammar rules.
-
-Example:
-print 2 + 3 * 4
-
-Root: +
-Left: 2
-Right: *
-    Left: 3
-    Right: 4
-
----
-
-## 6. Traversal vs Structure
-
-AST has no fixed reading order.
-
-Traversal types:
-- Inorder (Left Root Right)
-- Preorder (Root Left Right)
-- Postorder (Left Right Root)
-
-Interpreters usually use Postorder.
-
----
-
-## 7. Why AST is Needed
-
-- Separates meaning from text
-- Handles precedence
-- Enables evaluation
-- Enables future features (variables, if, loops)
-
----
-
-## 8. Big Picture Pipeline
-
-Source Code
-→ Tokenizer
-→ Parser
-→ AST
-→ Evaluator
-→ Output
-
----
-
-## 9. Key Takeaways
-
-- Tokens are not execution
-- Grammar defines shape
-- AST stores meaning
-- Traversal evaluates meaning
-
-
-# Day 7 — Abstract Syntax Tree (AST) & Node System
-
-## Goal
-Understand how a programming language represents code using tree structures and how expressions are evaluated using nodes.
-
----
-
-## What is AST (Abstract Syntax Tree)
-
-AST is a tree representation of source code.
-
-Example:
-2 + 3 * 4
-
-Tree:
-    +
-   / \
-  2   *
-     / \
-    3   4
-
-Tree structure represents operator precedence.
-
----
-
-## Node (Base Class)
-
-All language components extend a common parent called Node.
-
-Node defines:
-- evaluate() method
-
-Node is abstract and cannot be instantiated.
-
----
-
-## NumberNode
-
-Represents a numeric value.
-
-Stores:
-- int value
-
-Behavior:
-- evaluate() returns the stored value.
-
----
-
-## BinaryNode
-
-Represents binary operations.
-
-Examples:
-2 + 3  
-4 * 5  
-
-Stores:
-- Node left
-- Node right
-- char operator
-
-Behavior:
-1. Call left.evaluate()
-2. Call right.evaluate()
-3. Apply operator
-4. Return result
-
-BinaryNode does NOT handle precedence.
-
----
-
-## PrintNode
-
-Represents print statements.
-
-Example:
-print 5 + 2
-
-Stores:
-- Node expression
-
-Behavior:
-1. Evaluate expression
-2. Print value
-3. Return value
-
----
-
-## Recursive Evaluation
-
-Nodes call evaluate() on their children.
-Children may call evaluate() on their children.
-Process continues until NumberNode is reached.
-
-Values move upward through the tree.
-
----
-
-## Polymorphism
-
-All nodes are stored as type Node.
-
-Java decides at runtime which evaluate() method to call based on actual object type.
-
----
-
-## Responsibilities
-
-Tokenizer → Converts text to tokens  
-Parser → Builds AST  
-Nodes → Evaluate AST  
-
----
-
-## Key Rules
-
-- Operators exist only in BinaryNode  
-- Numbers exist only in NumberNode  
-- Precedence handled by Parser  
-- Nodes never read files  
-- Nodes never tokenize  
-
----
-
-## Result
-
-After Day 7 you understand:
-- AST structure
-- Node hierarchy
-- Recursive evaluation
-- Operator as root of BinaryNode
-- Separation of tokenizer, parser, and evaluator
+- Learned javac and java commands
+- Understood folder structure
+- Goal is to build a small programming language
+
+## Day 2 – File Reading
+- Program takes file name from command line
+- Only .el files are accepted
+- Used FileReader
+- Used BufferedReader
+- Read file line by line
+- Printed each line
+
+## Day 3 – Tokenization
+- Source code is broken into tokens
+- Tokens are small meaningful parts of a line
+- Used String.split(" ") to tokenize
+- Tokenization does not execute code
+- This is the first real step of a language
+
+## Day 4 – Token Class
+- Created Token class
+- Token has type and value
+- Created TokenType enum
+- Types include NUMBER, KEYWORD, OPERATOR, STRING, IDENTIFIER
+- Tokens are now objects instead of strings
+
+## Day 5 – Lexer
+- Created Lexer class
+- Reads characters one by one
+- Builds tokens manually
+- Detects numbers
+- Detects keywords
+- Detects strings
+- Detects operators
+- Returns List of Token
+
+## Day 6 – AST Introduction
+- AST means Abstract Syntax Tree
+- Tree represents code structure
+- Created Node base class
+- Created NumberNode
+- Created BinaryNode
+- Nodes represent structure not calculation
+
+## Day 7 – Evaluation
+- Added evaluate() method in Node
+- NumberNode returns number
+- BinaryNode evaluates left and right
+- BinaryNode applies operator
+- Tree can now calculate result
+
+## Day 8 – Pipeline
+- File is read
+- Lexer creates tokens
+- Parser will build AST
+- AST is evaluated
+- Flow: File → Tokens → AST → Result
+
+## Day 9 – Parser Basics
+- Created Parser class
+- Parser stores token list
+- Parser tracks current position
+- peek() looks at current token
+- consume() moves to next token
+- match() checks expected token
+
+## Day 9 – parseFactor
+- Handles numbers
+- Handles parentheses
+- Creates NumberNode
+- Calls parseExpression for brackets
+
+## Day 9 – parseTerm
+- Handles * and /
+- Calls parseFactor
+- Builds BinaryNode
+- Returns left node
+
+## Day 9 – parseExpression
+- Handles + and -
+- Calls parseTerm
+- Builds BinaryNode
+- Returns root of AST
