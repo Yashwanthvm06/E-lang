@@ -1,3 +1,5 @@
+import Nodes.Node;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -32,9 +34,17 @@ public class Main{
                     }
          // tokenizing
                 List<Token> tokens=Lexer.tokenize(line,lineNumber);
-        for(Token token:tokens){
+                // Create parser
+                Parser parser = new Parser(tokens);
+
+// Run all statements in this line
+                while (!parser.isAtEnd()) {
+                    Node stmt = parser.parseStatement();
+                    stmt.evaluate();
+                }
+        /*for(Token token:tokens){
             System.out.println("Tokens: "+token);
-        }
+        }*/
 lineNumber++;
     }
 }

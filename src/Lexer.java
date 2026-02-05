@@ -42,7 +42,7 @@ public static List<Token>  tokenize(String line,int lineNumber ){
                     i++;
                 }
                 String value = keywords.toString();
-                if(value.equals("print")){
+                if(value.equals("emit")){
                     tokens.add(new Token(TokenType.KEYWORD,value,lineNumber,column));
                 }
                 else{

@@ -1,6 +1,4 @@
-import Nodes.BinaryNode;
-import Nodes.Node;
-import Nodes.NumberNode;
+import Nodes.*;
 
 import java.util.List;
 public class Parser {
@@ -33,6 +31,13 @@ public class Parser {
     }
 
     public Node parseFactor(){
+        if(peek().type==TokenType.KEYWORD && peek().value.equals("emit")){
+            consume();
+            match(TokenType.LPAREN);
+            Node expr=parseExpression();
+            match(TokenType.RPAREN);
+            return new EmitNode(expr);
+        }
         if(peek().type==TokenType.NUMBER){
             Token t=consume();
             return new NumberNode(Integer.parseInt(t.value));
@@ -63,6 +68,11 @@ return left;
         }
         return left;
     }
-
-
+    public Node parseStatement(){
+        return parseFactor();
+    }
+    public boolean isAtEnd(){
+        return position >= tokens.size();
+    }
 }
+
