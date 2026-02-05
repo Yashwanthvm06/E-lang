@@ -42,6 +42,10 @@ public class Parser {
             Token t=consume();
             return new NumberNode(Integer.parseInt(t.value));
         }
+        if(peek().type==TokenType.STRING){
+            Token t=consume();
+            return new StringNode(t.value);
+        }
         if(peek().type==TokenType.LPAREN){
             consume();
             Node expr = parseExpression();

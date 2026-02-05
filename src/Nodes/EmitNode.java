@@ -8,8 +8,8 @@ public class EmitNode extends Node{
     }
 
     @Override
-    public int evaluate(){
-        int value=expression.evaluate();
+    public Object evaluate(){
+        Object value=expression.evaluate();
         System.out.println(value);
         return value;
     }

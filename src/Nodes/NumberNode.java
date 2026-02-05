@@ -6,7 +6,7 @@ public class NumberNode extends Node{
         this.value=value;
     }
     @Override
-    public int evaluate(){
+    public Object evaluate(){
 return value;
     }
 }
