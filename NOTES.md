@@ -1,88 +1,157 @@
-# ELang – Learning Notes
+# E-lang – Core Programming Language Development Notes
 
-## Day 1 – Project Setup
-- Created Java project
-- Created GitHub repository
-- Learned javac and java commands
-- Understood folder structure
-- Goal is to build a small programming language
+---
 
-## Day 2 – File Reading
-- Program takes file name from command line
-- Only .el files are accepted
-- Used FileReader
-- Used BufferedReader
-- Read file line by line
-- Printed each line
+## Day 1 – Language Idea & Scope
+- Decided to build a simple interpreted language (E-lang)
+- Language goals:
+  - Variables
+  - Expressions
+  - Print/output
+  - Step-by-step compiler architecture
+- Chose Java for implementation
 
-## Day 3 – Tokenization
-- Source code is broken into tokens
-- Tokens are small meaningful parts of a line
-- Used String.split(" ") to tokenize
-- Tokenization does not execute code
-- This is the first real step of a language
+---
 
-## Day 4 – Token Class
-- Created Token class
-- Token has type and value
-- Created TokenType enum
-- Types include NUMBER, KEYWORD, OPERATOR, STRING, IDENTIFIER
-- Tokens are now objects instead of strings
+## Day 2 – Source Code Handling
+- Read source code from file
+- Process code line by line
+- Maintain line numbers for error reporting
+- Understood difference between source text vs program structure
 
-## Day 5 – Lexer
-- Created Lexer class
-- Reads characters one by one
-- Builds tokens manually
-- Detects numbers
-- Detects keywords
-- Detects strings
-- Detects operators
-- Returns List of Token
+---
 
-## Day 6 – AST Introduction
-- AST means Abstract Syntax Tree
-- Tree represents code structure
-- Created Node base class
-- Created NumberNode
-- Created BinaryNode
-- Nodes represent structure not calculation
+## Day 3 – Tokenization (Lexer Basics)
+- Broke source code into tokens
+- Tokens represent smallest meaningful units
+- Implemented:
+  - Numbers
+  - Identifiers
+  - Operators
+  - Parentheses
+- Lexer does NOT execute code
 
-## Day 7 – Evaluation
-- Added evaluate() method in Node
-- NumberNode returns number
-- BinaryNode evaluates left and right
-- BinaryNode applies operator
-- Tree can now calculate result
+---
 
-## Day 8 – Pipeline
-- File is read
-- Lexer creates tokens
-- Parser will build AST
-- AST is evaluated
-- Flow: File → Tokens → AST → Result
+## Day 4 – Token Metadata
+- Added:
+  - TokenType enum
+  - Token value
+  - Line number
+  - Column number
+- Improved error messages
+- Lexer now produces rich tokens
 
-## Day 9 – Parser Basics
-- Created Parser class
-- Parser stores token list
-- Parser tracks current position
-- peek() looks at current token
-- consume() moves to next token
-- match() checks expected token
+---
 
-## Day 9 – parseFactor
-- Handles numbers
-- Handles parentheses
-- Creates NumberNode
-- Calls parseExpression for brackets
+## Day 5 – Keywords & Strings
+- Added keyword support (`emit`)
+- Implemented string literals
+- Handled unterminated strings
+- Differentiated keywords vs identifiers
 
-## Day 9 – parseTerm
-- Handles * and /
-- Calls parseFactor
-- Builds BinaryNode
-- Returns left node
+---
 
-## Day 9 – parseExpression
-- Handles + and -
-- Calls parseTerm
-- Builds BinaryNode
-- Returns root of AST
+## Day 6 – Expression Parsing (Parser Basics)
+- Introduced recursive descent parser
+- Implemented:
+  - parseFactor
+  - parseTerm
+  - parseExpression
+- Handled operator precedence (* / before + -)
+
+---
+
+## Day 7 – Abstract Syntax Tree (AST)
+- Introduced Node base class
+- Each syntax construct = AST node
+- Separated parsing from execution
+- AST represents program structure
+
+---
+
+## Day 8 – Expression Evaluation
+- Implemented evaluation logic inside nodes
+- Created:
+  - NumberNode
+  - StringNode
+  - BinaryNode
+- Expressions now execute correctly
+
+---
+
+## Day 9 – Variables & Assignment
+- Implemented variable assignment
+- Added AssignNode
+- Introduced Environment for variable storage
+- Variables persist across expressions
+
+---
+
+## Day 10 – Output / Emit Statement
+- Implemented emit(expr)
+- Added EmitNode
+- Enabled visible program output
+- Differentiated statements vs expressions (conceptually)
+
+---
+
+## Day 11 – Program-Level Thinking
+- Realized single-line parsing is insufficient
+- Identified need for:
+  - Program root
+  - Multiple statement execution
+- Understood real interpreter flow
+
+---
+
+## Day 12 – Program-Level Lexing
+- Lexer upgraded to handle full programs
+- Combined tokens from all lines
+- Added EOF token
+- Parser now receives complete token stream
+
+---
+
+## Day 13 – Program-Level Parsing
+- Introduced ProgramNode as AST root
+- Added parseProgram() to parser
+- Parser now:
+  - Consumes tokens until EOF
+  - Builds list of statements
+- Program executes sequentially
+
+---
+
+## Current Architecture Summary
+Source Code  
+→ Lexer (tokenizeProgram)  
+→ Tokens + EOF  
+→ Parser (parseProgram)  
+→ AST (ProgramNode)  
+→ Environment  
+→ Evaluation  
+
+---
+
+## Next Planned Steps
+- Block parsing `{ }`
+- Nested scopes
+- if / while control flow
+- Functions
+- Return statements
+
+---
+
+## Key Learnings
+- Lexer ≠ Parser ≠ AST ≠ Execution
+- Programs are sequences, not single expressions
+- EOF is critical for safe parsing
+- Environment controls program state
+- Clean structure matters more than features
+
+---
+
+## Status
+- Core interpreter foundation complete
+- Ready for control flow and functions

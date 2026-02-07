@@ -50,6 +50,11 @@ public static List<Token>  tokenize(String line,int lineNumber ){
                 }
                 continue;
             }
+            if(current=='='){
+                tokens.add(new Token(TokenType.ASSIGN,String.valueOf(current),lineNumber,column));
+                i++;
+                continue;
+            }
             // String
             if(current=='"'){
                 i++;
@@ -72,12 +77,11 @@ public static List<Token>  tokenize(String line,int lineNumber ){
                 i++;
                 continue;
             }
-            if(current==')'){
-                tokens.add(new Token(TokenType.RPAREN,")",lineNumber,column));
+            if(current==')') {
+                tokens.add(new Token(TokenType.RPAREN, ")", lineNumber, column));
                 i++;
                 continue;
             }
-
             if(current == '+' || current == '-' || current == '*' || current == '/'){
                 tokens.add(new Token(TokenType.OPERATOR,String.valueOf(current),lineNumber,column));
                 i++;
@@ -87,4 +91,19 @@ public static List<Token>  tokenize(String line,int lineNumber ){
         }
 return tokens;
 }
+
+//controlller
+    public static List<Token> tokenizeProgram(List<String> lines){
+    List<Token> tokens=new ArrayList<>();
+    int lineNo=1;
+    for(String line:lines){
+        List<Token> each_line=tokenize(line,lineNo);
+        tokens.addAll(each_line);
+        lineNo++;
+    }
+    tokens.add(new Token(TokenType.EOF,"",lineNo,0));
+    return tokens;
+    }
+
+
 }

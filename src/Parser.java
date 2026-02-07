@@ -1,17 +1,29 @@
 import Nodes.*;
+import runtime.Environment;
 
 import java.util.List;
 public class Parser {
+    private Environment environment;
+
+    public Parser(List<Token> tokens, Environment environment){
+        this.tokens=tokens;
+        this.environment=environment;
+    }
+
     private List<Token> tokens;
     private int position=0;
-    public Parser(List<Token> tokens) {
-        this.tokens = tokens;
-    }
+
     public Token peek(){
         if(position<tokens.size()){
             return tokens.get(position);
         }
         return null;
+    }
+    public Token peekNext(){
+        if(position+1< tokens.size()){
+            return tokens.get(position+1);
+        }
+return null;
     }
     public Token consume(){
         Token current=peek();
@@ -46,6 +58,10 @@ public class Parser {
             Token t=consume();
             return new StringNode(t.value);
         }
+        if(peek().type==TokenType.IDENTIFIER){
+            Token t=consume();
+            return new VariableNode(t.value,environment);
+        }
         if(peek().type==TokenType.LPAREN){
             consume();
             Node expr = parseExpression();
@@ -73,7 +89,16 @@ return left;
         return left;
     }
     public Node parseStatement(){
-        return parseFactor();
+        if(peek().type==TokenType.IDENTIFIER &&
+                peekNext()!=null &&
+                peekNext().type==TokenType.ASSIGN){
+            String name=consume().value;
+            consume();
+            Node value=parseExpression();
+            return new AssignNode(name, value, environment);
+
+        }
+        return parseExpression();
     }
     public boolean isAtEnd(){
         return position >= tokens.size();

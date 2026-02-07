@@ -1,3 +1,5 @@
-print Hello
-print 2 + 2
-print ("Yashwanth yash")
+emit(2)
+emit(2+2)
+emit(2*(3+4))
+emit((1+2)+3)
+emit("hello World")

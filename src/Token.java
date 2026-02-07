@@ -1,6 +1,6 @@
 public class Token {
-    TokenType type;
-    String value;
+    public TokenType type;
+    public String value;
     int line;
     int column;
 

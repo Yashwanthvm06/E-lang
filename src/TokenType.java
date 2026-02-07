@@ -5,5 +5,7 @@ public enum TokenType {
     IDENTIFIER,
     STRING,
     LPAREN,
-    RPAREN
+    RPAREN,
+    ASSIGN,
+    EOF
 }
