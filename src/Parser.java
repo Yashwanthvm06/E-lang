@@ -1,6 +1,7 @@
 import Nodes.*;
 import runtime.Environment;
 
+import java.util.ArrayList;
 import java.util.List;
 public class Parser {
     private Environment environment;
@@ -42,13 +43,9 @@ return null;
         }
     }
 
-    public Node parseFactor(){
-        if(peek().type==TokenType.KEYWORD && peek().value.equals("emit")){
-            consume();
-            match(TokenType.LPAREN);
-            Node expr=parseExpression();
-            match(TokenType.RPAREN);
-            return new EmitNode(expr);
+    private Expression parseFactor(){
+        if(peek()==null){
+            throw new RuntimeException("Unexpected end of input");
         }
         if(peek().type==TokenType.NUMBER){
             Token t=consume();
@@ -64,42 +61,62 @@ return null;
         }
         if(peek().type==TokenType.LPAREN){
             consume();
-            Node expr = parseExpression();
+            Expression expr = parseExpression();
             match(TokenType.RPAREN);
             return expr;
         }
         throw new RuntimeException("Invalid factor");
     }
-        public Node parseTerm(){
-            Node left=parseFactor();
+
+        private Expression parseTerm(){
+            Expression left=parseFactor();
             while(peek()!=null && peek().type==TokenType.OPERATOR && (peek().value.equals("*") || peek().value.equals("/"))){
             Token op= consume();
-            Node right = parseFactor();
+                Expression right = parseFactor();
             left= new BinaryNode(left,op.value.charAt(0),right);
             }
 return left;
         }
-    public Node parseExpression() {
-        Node left=parseTerm();
+
+    public Expression parseExpression() {
+        Expression left=parseTerm();
         while(peek()!=null && peek().type==TokenType.OPERATOR && (peek().value.equals("+") || peek().value.equals("-"))){
             Token op =consume();
-            Node right=parseTerm();
+            Expression right=parseTerm();
             left=new BinaryNode(left,op.value.charAt(0),right);
         }
         return left;
     }
-    public Node parseStatement(){
-        if(peek().type==TokenType.IDENTIFIER &&
+    public Statement parseStatement(){
+        if(peek()==null){
+            throw new RuntimeException("Unexpected end of input");
+        }
+        if(peek().type==TokenType.KEYWORD && peek().value.equals("emit")){
+            consume();
+            match(TokenType.LPAREN);
+            Expression expr=parseExpression();
+            match(TokenType.RPAREN);
+            return new EmitNode(expr);
+        }
+        else if(peek().type==TokenType.IDENTIFIER &&
                 peekNext()!=null &&
                 peekNext().type==TokenType.ASSIGN){
             String name=consume().value;
             consume();
-            Node value=parseExpression();
-            return new AssignNode(name, value, environment);
-
+            Expression value=parseExpression();
+            return new AssignNode(name, value);
         }
-        return parseExpression();
+        throw new RuntimeException("Invalid Statement");
     }
+    public List<Statement> parseProgram(){
+        List<Statement> statements=new ArrayList<>();
+        while(peek()!=null && peek().type!=TokenType.EOF){
+            Statement stmt=parseStatement();
+            statements.add(stmt);
+        }
+        return statements;
+    }
+
     public boolean isAtEnd(){
         return position >= tokens.size();
     }

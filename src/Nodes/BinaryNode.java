@@ -1,11 +1,11 @@
 package Nodes;
 
-public class BinaryNode extends Node {
+public class BinaryNode extends Expression {
+    private Expression left;
+    private Expression right;
     private char operator;
-    private Node left;
-    private Node right;
 
-    public BinaryNode(Node left, char operator, Node right) {
+    public BinaryNode(Expression left, char operator, Expression right) {
         this.left = left;
         this.operator = operator;
         this.right = right;
@@ -13,23 +13,22 @@ public class BinaryNode extends Node {
 
     @Override
     public Object evaluate() {
-        Object leftvalue = left.evaluate();
-        Object rightvalue = right.evaluate();
-        if (!(leftvalue instanceof Integer) || !(rightvalue instanceof Integer)) {
-            throw new RuntimeException("Binary operation require numbers");
+        Object l = left.evaluate();
+        Object r = right.evaluate();
+
+        if (!(l instanceof Integer) || !(r instanceof Integer)) {
+            throw new RuntimeException("Binary operations require numbers");
         }
-        int l = (Integer) leftvalue;
-        int r = (Integer) rightvalue;
-        switch ( operator ) {
-            case '+':
-                return l + r;
-            case '-':
-                return l - r;
-            case '*':
-                return l * r;
-            case '/':
-                return l / r;
-        }
-        throw new RuntimeException("Unknown Error");
+
+        int a = (Integer) l;
+        int b = (Integer) r;
+
+        return switch (operator) {
+            case '+' -> a + b;
+            case '-' -> a - b;
+            case '*' -> a * b;
+            case '/' -> a / b;
+            default -> throw new RuntimeException("Unknown operator");
+        };
     }
 }

@@ -1,21 +1,19 @@
 package Nodes;
+
 import runtime.Environment;
 
-public class AssignNode extends Node {
-    private Environment evironment;
+public class AssignNode extends Statement {
     private String name;
-    private Node value;
+    private Expression value;
 
-    public AssignNode(String name, Node value,Environment environment) {
+    public AssignNode(String name, Expression value) {
         this.name = name;
         this.value = value;
-        this.evironment=environment;
     }
 
     @Override
-    public Object evaluate() {
+    public void execute() {
         Object result = value.evaluate();
         Environment.set(name, result);
-        return result;
     }
 }

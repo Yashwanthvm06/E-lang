@@ -1,12 +1,17 @@
 import Nodes.Node;
+import Nodes.ProgramNode;
+import runtime.Environment;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main{
     public static void main(String[] args) {
+        List<Node> statements = new ArrayList<>();
+
         if(args.length==0){
             System.out.println("please provide the .el file");
             return ;
@@ -35,12 +40,12 @@ public class Main{
          // tokenizing
                 List<Token> tokens=Lexer.tokenize(line,lineNumber);
                 // Create parser
-                Parser parser = new Parser(tokens);
+                 Parser parser = new Parser(tokens,env);
 
 // Run all statements in this line
                 while (!parser.isAtEnd()) {
                     Node stmt = parser.parseStatement();
-                    stmt.evaluate();
+                    statements.add(stmt);
                 }
         /*for(Token token:tokens){
             System.out.println("Tokens: "+token);

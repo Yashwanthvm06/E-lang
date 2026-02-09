@@ -1,6 +1,6 @@
 package Nodes;
 
-public class StringNode extends Node{
+public class StringNode extends Expression{
     private String str;
     public StringNode(String value){
         this.str=value;

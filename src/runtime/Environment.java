@@ -2,7 +2,9 @@ package runtime;
 
 import java.util.*;
 public class Environment {
+
     private static Map<String,Object> values=new HashMap<>();
+
     public static void set(String name, Object value){
         values.put(name,value);
     }

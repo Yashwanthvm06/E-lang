@@ -2,7 +2,7 @@ package Nodes;
 
 import runtime.Environment;
 
-public class VariableNode extends Node{
+public class VariableNode extends Expression{
     private String name;
     private Environment env;
     public VariableNode(String name,Environment env) {
