@@ -1,6 +1,7 @@
 package Nodes;
 
 public class BinaryNode extends Expression {
+
     private Expression left;
     private Expression right;
     private char operator;
@@ -15,10 +16,6 @@ public class BinaryNode extends Expression {
     public Object evaluate() {
         Object l = left.evaluate();
         Object r = right.evaluate();
-
-        if (!(l instanceof Integer) || !(r instanceof Integer)) {
-            throw new RuntimeException("Binary operations require numbers");
-        }
 
         int a = (Integer) l;
         int b = (Integer) r;

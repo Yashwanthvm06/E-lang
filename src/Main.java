@@ -1,60 +1,65 @@
-import Nodes.Node;
-import Nodes.ProgramNode;
+import Nodes.*;
 import runtime.Environment;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Main{
+public class Main {
     public static void main(String[] args) {
-        List<Node> statements = new ArrayList<>();
 
-        if(args.length==0){
+        if (args.length == 0) {
             System.out.println("please provide the .el file");
-            return ;
+            return;
         }
-        if(args.length>1){
+
+        if (args.length > 1) {
             System.out.println("ufff wait.. tooo many arguments");
             return;
         }
 
-        String name_check=args[0];
-        if(!name_check.endsWith(".el")){
-            System.out.println("Hey this is elang only .el files allowed");
-            return ;
+        String fileName = args[0];
+        if (!fileName.endsWith(".el")) {
+            System.out.println("Hey this is elang :(, only .el files allowed");
+            return;
         }
 
-        try(BufferedReader reader=new BufferedReader(new FileReader((args[0])))){
-                String line;
-                int lineNumber=1;
-            while((line= reader.readLine())!=null){
-                line =line.trim();
-                //if no code in file
-                    if(line.isEmpty()){
-                        lineNumber++;
-                        continue;
-                    }
-         // tokenizing
-                List<Token> tokens=Lexer.tokenize(line,lineNumber);
-                // Create parser
-                 Parser parser = new Parser(tokens,env);
+        List<Statement> statements = new ArrayList<>();
+        Environment env = new Environment();
 
-// Run all statements in this line
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            int lineNumber = 1;
+
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+
+                if (line.isEmpty()) {
+                    lineNumber++;
+                    continue;
+                }
+
+                List<Token> tokens = Lexer.tokenize(line, lineNumber);
+
+                // parse tokens → AST nodes
+                Parser parser = new Parser(tokens, env);
+
                 while (!parser.isAtEnd()) {
-                    Node stmt = parser.parseStatement();
+                    Statement stmt = parser.parseStatement();
                     statements.add(stmt);
                 }
-        /*for(Token token:tokens){
-            System.out.println("Tokens: "+token);
-        }*/
-lineNumber++;
-    }
-}
-    catch(IOException e){
-    System.out.println("Error reading the provided file: " + e.getMessage());
-}
+
+                lineNumber++;
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error reading the provided file: " + e.getMessage());
+            return;
+        }
+
+        // execute AFTER parsing everything
+        ProgramNode program = new ProgramNode(statements);
+        program.execute();
     }
 }
